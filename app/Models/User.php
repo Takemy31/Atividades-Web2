@@ -12,6 +12,9 @@ use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
+
+use App\Models\Book;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -28,5 +31,12 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'borrowings')
+                    ->withPivot('borrowed_at', 'returned_at')
+                    ->withTimestamps();
     }
 }
