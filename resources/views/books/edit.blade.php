@@ -16,6 +16,16 @@
                 </div>
             @enderror
         </div>
+        
+         <div class="mb-3">
+            <label for="published_year" class="form-label">Ano de Publicação</label>
+            <input type="text" class="form-control @error('published_year') is-invalid @enderror" id="published_year" name="published_year" value="{{ old('published_year', $book->published_year) }}" required>
+            @error('published_year')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
 
         <div class="mb-3">
             <label for="publisher_id" class="form-label">Editora</label>
@@ -62,6 +72,16 @@
                 @endforeach
             </select>
             @error('category_id')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+         <div class="mb-3">
+            <label for="pages" class="form-label">Páginas</label>
+            <input type="text" class="form-control @error('pages') is-invalid @enderror" id="pages" name="pages" value="{{ old('pages', $book->pages) }}" required>
+            @error('pages')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

@@ -21,9 +21,11 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'published_year' => 'required|int',
             'publisher_id' => 'required|exists:publishers,id',
             'author_id' => 'required|exists:authors,id',
             'category_id' => 'required|exists:categories,id',
+            'pages' => 'required|integer|min:1',
         ]);
 
         Book::create($request->all());
@@ -46,9 +48,11 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'published_year' => 'required|int',
             'publisher_id' => 'required|exists:publishers,id',
             'author_id' => 'required|exists:authors,id',
             'category_id' => 'required|exists:categories,id',
+            'pages' => 'required|integer|min:1',
         ]);
 
         Book::create($request->all());
@@ -70,9 +74,11 @@ class BookController extends Controller
 {
     $request->validate([
         'title' => 'required|string|max:255',
+        'published_year' => 'required|int',
         'publisher_id' => 'required|exists:publishers,id',
         'author_id' => 'required|exists:authors,id',
         'category_id' => 'required|exists:categories,id',
+        'pages' => 'required|integer|min:1',
     ]);
 
     $book->update($request->all());
@@ -97,6 +103,13 @@ public function index()
     return view('books.index', compact('books'));
 
 }
+
+public function destroy(Book $book)
+    {
+        $book->delete();
+
+        return redirect()->route('books.index')->with('success', 'Livro excluído com sucesso.');
+    }
 
 
 }

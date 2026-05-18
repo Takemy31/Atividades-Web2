@@ -8,23 +8,14 @@
         <div class="card-header">
             <strong>Título:</strong> {{ $book->title }}
         </div>
+
         <div class="card-body">
-            <p><strong>Autor:</strong>
-                <a href="{{ route('authors.show', $book->author->id) }}">
-                    {{ $book->author->name }}
-                </a>
-            </p>
-            
-            <p><strong>Editora:</strong>
-                <a href="{{ route('publishers.show', $book->publisher->id) }}">
-                    {{ $book->publisher->name }}
-                </a>
-            </p>
-            <p><strong>Categoria:</strong>
-                <a href="{{ route('categories.show', $book->category->id) }}">
-                    {{ $book->category->name }}
-                </a>
-            </p>
+             
+            <p><strong>Ano de Publicação:</strong> {{ $book->published_year }}</p>
+            <p><strong>Autor:</strong> {{ $book->author->name }}</p>
+            <p><strong>Editora:</strong>{{ $book->publisher->name }}</p>
+            <p><strong>Categoria:</strong>{{ $book->category->name }}</p>
+            <p><strong>Páginas:</strong> {{ $book->pages }}</p>
         </div>
     </div>
 
