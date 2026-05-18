@@ -7,9 +7,12 @@ use App\Models\Publisher;
 use App\Models\Author;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class BookController extends Controller
 {
+
+
     // Formulário com input de ID
     public function createWithId()
     {
@@ -88,11 +91,11 @@ class BookController extends Controller
 
 public function show(Book $book)
 {
-    // Carregando autor, editora e categoria do livro com eager loading
-    $book->load(['author', 'publisher', 'category']);
+    $book->load(['author', 'publisher', 'category', 'users']);
 
-    return view('books.show', compact('book'));
+    $users = User::all();
 
+    return view('books.show', compact('book', 'users'));
 }
 
 public function index()
