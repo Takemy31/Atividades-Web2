@@ -8,6 +8,7 @@ use App\Models\Author;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -21,20 +22,27 @@ class BookController extends Controller
 
     // Salvar livro com input de ID
     public function storeWithId(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'published_year' => 'required|int',
-            'publisher_id' => 'required|exists:publishers,id',
-            'author_id' => 'required|exists:authors,id',
-            'category_id' => 'required|exists:categories,id',
-            'pages' => 'required|integer|min:1',
-        ]);
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'published_year' => 'required|int',
+        'publisher_id' => 'required|exists:publishers,id',
+        'author_id' => 'required|exists:authors,id',
+        'category_id' => 'required|exists:categories,id',
+        'pages' => 'required|integer|min:1',
+        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
 
-        Book::create($request->all());
-
-        return redirect()->route('books.index')->with('success', 'Livro criado com sucesso.');
+    if ($request->hasFile('cover_image')) {
+        $path = $request->file('cover_image')->store('covers', 'public');
+        $validated['cover_image'] = $path;
     }
+
+    Book::create($validated);
+
+    return redirect()->route('books.index')
+        ->with('success', 'Livro criado com sucesso.');
+}
 
     // Formulário com input select
     public function createWithSelect()
@@ -49,16 +57,20 @@ class BookController extends Controller
     // Salvar livro com input select
     public function storeWithSelect(Request $request)
     {
-        $request->validate([
+       $validated = $request->validate([
             'title' => 'required|string|max:255',
             'published_year' => 'required|int',
             'publisher_id' => 'required|exists:publishers,id',
             'author_id' => 'required|exists:authors,id',
             'category_id' => 'required|exists:categories,id',
             'pages' => 'required|integer|min:1',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-
-        Book::create($request->all());
+        if ($request->hasFile('cover_image')) {
+        $path = $request->file('cover_image')->store('covers', 'public');
+        $validated['cover_image'] = $path;
+    }
+        Book::create($validated);
 
         return redirect()->route('books.index')->with('success', 'Livro criado com sucesso.');
     }
@@ -73,20 +85,33 @@ class BookController extends Controller
     return view('books.edit', compact('book', 'publishers', 'authors', 'categories'));
     }
     
-    public function update(Request $request, Book $book)
+   public function update(Request $request, Book $book)
 {
-    $request->validate([
+    $validated = $request->validate([
         'title' => 'required|string|max:255',
-        'published_year' => 'required|int',
         'publisher_id' => 'required|exists:publishers,id',
         'author_id' => 'required|exists:authors,id',
         'category_id' => 'required|exists:categories,id',
-        'pages' => 'required|integer|min:1',
+        'published_year' => 'required',
+        'pages' => 'required',
+        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
     ]);
 
-    $book->update($request->all());
+    if ($request->hasFile('cover_image')) {
 
-    return redirect()->route('books.index')->with('success', 'Livro atualizado com sucesso.');
+        if ($book->cover_image) {
+            Storage::disk('public')->delete($book->cover_image);
+        }
+
+        $path = $request->file('cover_image')->store('covers', 'public');
+
+        $validated['cover_image'] = $path;
+    }
+
+    $book->update($validated);
+
+    return redirect()->route('books.index')
+        ->with('success', 'Livro atualizado com sucesso.');
 }
 
 public function show(Book $book)
@@ -108,12 +133,13 @@ public function index()
 }
 
 public function destroy(Book $book)
-    {
-        $book->delete();
-
-        return redirect()->route('books.index')->with('success', 'Livro excluído com sucesso.');
+{
+    if ($book->cover_image) {
+        Storage::disk('public')->delete($book->cover_image);
     }
 
+    $book->delete();
 
+    return redirect()->route('books.index')->with('success', 'Livro excluído com sucesso.');
 }
-
+}
