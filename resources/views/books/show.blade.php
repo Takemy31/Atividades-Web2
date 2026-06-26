@@ -5,6 +5,20 @@
 </a>
     <h1 class="my-4">Detalhes do Livro</h1>
 
+    {{-- Mensagem de sucesso --}}
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- Mensagem de erro --}}
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+    
     <div class="card">
         <div class="card-header">
             <strong>Título:</strong> {{ $book->title }}
