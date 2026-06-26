@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
+     <a href="{{ route('home') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
     <h1 class="my-4">Lista de Editoras</h1>
 
     <a href="{{ route('publishers.create') }}" class="btn btn-success mb-3">

@@ -10,6 +10,16 @@
         </div>
         <div class="card-body">
             <p><strong>Email:</strong> {{ $user->email }}</p>
+            <p><strong>Papel/Role:</strong> 
+                <span class="badge 
+                    @if($user->role === 'admin') bg-danger
+                    @elseif($user->role === 'bibliotecario') bg-info
+                    @else bg-secondary
+                    @endif
+                ">
+                    {{ ucfirst($user->role) }}
+                </span>
+            </p>
         </div>
     </div>
 

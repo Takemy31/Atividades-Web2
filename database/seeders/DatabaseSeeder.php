@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         FakerFactory::create()->Unique(true);
         $this->call([
+            AdminUserSeeder::class,
             CategorySeeder::class,
             AuthorPublisherBookSeeder::class,
             UserBorrowingSeeder::class,

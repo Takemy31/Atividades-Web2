@@ -10,34 +10,40 @@ use App\Models\Borrowing;
 class BorrowingController extends Controller
 {
     public function store(Request $request, Book $book)
-{
-    $request->validate([
-        'user_id' => 'required|exists:users,id',
-    ]);
+    {
+        // Only librarians and admins can register borrowings
+        $this->authorize('create', Book::class);
+        
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
 
-    Borrowing::create([
-        'user_id' => $request->user_id,
-        'book_id' => $book->id,
-        'borrowed_at' => now(),
-    ]);
+        Borrowing::create([
+            'user_id' => $request->user_id,
+            'book_id' => $book->id,
+            'borrowed_at' => now(),
+        ]);
 
-    return redirect()->route('books.show', $book)->with('success', 'Empréstimo registrado com sucesso.');
-}
+        return redirect()->route('books.show', $book)->with('success', 'Empréstimo registrado com sucesso.');
+    }
 
-public function returnBook(Borrowing $borrowing)
-{
-    $borrowing->update([
-        'returned_at' => now(),
-    ]);
+    public function returnBook(Borrowing $borrowing)
+    {
+        // Only librarians and admins can return books
+        $this->authorize('update', $borrowing->book);
+        
+        $borrowing->update([
+            'returned_at' => now(),
+        ]);
 
-    return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Devolução registrada com sucesso.');
-}
+        return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Devolução registrada com sucesso.');
+    }
 
-public function userBorrowings(User $user)
-{
-    $borrowings = $user->books()->withPivot('borrowed_at', 'returned_at')->get();
+    public function userBorrowings(User $user)
+    {
+        $this->authorize('view', $user);
+        
+        $borrowings = $user->books()->withPivot('borrowed_at', 'returned_at')->get();
 
-    return view('users.borrowings', compact('user', 'borrowings'));
-}
-
-}
+        return view('users.borrowings', compact('user', 'borrowings'));
+    }

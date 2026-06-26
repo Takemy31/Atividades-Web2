@@ -9,17 +9,21 @@ class AuthorController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Author::class);
         $authors = Author::all();
         return view('authors.index', compact('authors'));
     }
 
     public function create()
     {
+        $this->authorize('create', Author::class);
         return view('authors.create');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Author::class);
+        
         $request->validate([
             'name' => 'required',
             'birth_date' => 'required|date',
@@ -33,16 +37,20 @@ class AuthorController extends Controller
 
     public function show(Author $author)
     {
+        $this->authorize('view', $author);
         return view('authors.show', compact('author'));
     }
 
     public function edit(Author $author)
     {
+        $this->authorize('update', $author);
         return view('authors.edit', compact('author'));
     }
 
     public function update(Request $request, Author $author)
     {
+        $this->authorize('update', $author);
+        
         $request->validate([
             'name' => 'required',
             'birth_date' => 'required|date',
@@ -56,6 +64,8 @@ class AuthorController extends Controller
 
     public function destroy(Author $author)
     {
+        $this->authorize('delete', $author);
+        
         $author->delete();
 
         return redirect()->route('authors.index')->with('success', 'Autor excluído.');

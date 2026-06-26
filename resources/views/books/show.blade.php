@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+</a>
     <h1 class="my-4">Detalhes do Livro</h1>
 
     <div class="card">

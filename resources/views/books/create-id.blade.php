@@ -75,6 +75,9 @@
         
 
         <button type="submit" class="btn btn-success">Salvar</button>
+        <a href="{{ route('books.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
     </form>
 </div>
 @endsection

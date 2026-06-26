@@ -20,6 +20,29 @@
                    value="{{ old('email', $user->email) }}" required>
         </div>
 
+        @if(auth()->user()->isAdmin())
+        <div class="mb-3">
+            <label class="form-label">Papel/Role</label>
+            <select class="form-control" name="role">
+                <option value="cliente" {{ old('role', $user->role) === 'cliente' ? 'selected' : '' }}>
+                    Cliente
+                </option>
+                <option value="bibliotecario" {{ old('role', $user->role) === 'bibliotecario' ? 'selected' : '' }}>
+                    Bibliotecário
+                </option>
+                <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>
+                    Admin
+                </option>
+            </select>
+        </div>
+        @else
+        <div class="mb-3">
+            <label class="form-label">Papel/Role</label>
+            <input type="text" class="form-control" value="{{ $user->role }}" disabled>
+            <small class="form-text text-muted">Apenas administradores podem alterar papéis.</small>
+        </div>
+        @endif
+
         <button type="submit" class="btn btn-success">Salvar</button>
         <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>
