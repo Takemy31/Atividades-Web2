@@ -17,7 +17,17 @@ class BorrowingController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
         ]);
-        
+            
+        // Livro já emprestado?        
+            $livrosEmprestados = Borrowing::where('user_id', $request->user_id)
+            ->whereNull('returned_at')
+            ->count();
+
+            if ($livrosEmprestados >= 5) {
+            return redirect()
+            ->route('books.show', $book)
+            ->with('error', 'Este usuário já possui 5 livros emprestados.');
+}
         $emprestimoAberto = Borrowing::where('book_id', $book->id)
         ->whereNull('returned_at')
         ->exists();
