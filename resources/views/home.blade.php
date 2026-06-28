@@ -83,24 +83,42 @@
             </div>
 
             <!-- Cartão de Usuários (apenas para admin) -->
-            @if(auth()->user()->isAdmin())
-                <div class="row">
-                    <div class="col-md-6 col-lg-3 mb-4">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <i class="bi bi-people"></i> Usuários
-                                </h5>
-                                <p class="card-text">Gerencie usuários do sistema</p>
-                                <a href="{{ route('users.index') }}" class="btn btn-danger">
-                                    Acessar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+            <div class="row">
+
+    @if(auth()->user()->isAdmin())
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-people"></i> Usuários
+                    </h5>
+                    <p class="card-text">Gerencie usuários do sistema</p>
+                    <a href="{{ route('users.index') }}" class="btn btn-danger">
+                        Acessar
+                    </a>
                 </div>
-            @endif
+            </div>
+        </div>
+    @endif
+
+    @if(auth()->user()->isAdmin() || auth()->user()->role == 'bibliotecario')
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-cash-coin"></i> Multas
+                    </h5>
+                    <p class="card-text">Visualize usuários com débitos pendentes</p>
+                    <a href="{{ route('users.debits') }}" class="btn btn-warning">
+                        Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+    @endif
+
+</div>
         </div>
     </div>
-</div>
+
 @endsection

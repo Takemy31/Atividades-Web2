@@ -8,6 +8,13 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BorrowingController;
 
+
+Route::get('/users/debits', [UserController::class, 'debits'])
+    ->name('users.debits');
+
+Route::patch('/users/{user}/clear-debit', [UserController::class, 'clearDebit'])
+    ->name('users.clearDebit');
+
 // Rota para registrar um empréstimo
 Route::post('/books/{book}/borrow', [BorrowingController::class, 'store'])->name('books.borrow');
 
